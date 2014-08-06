@@ -7,6 +7,9 @@ namespace LagomRealism
 {
     class ConsoleHelper
     {
+        /// <summary>
+        /// Heyo
+        /// </summary>
         List<Client> Clients;
         public volatile bool End = false;
         public volatile bool Stop = false;
