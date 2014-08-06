@@ -136,7 +136,7 @@ namespace LagomRealism
                                 client.ReceivedWorld = true;
                                 continue;
                             }
-                            //hEJ PAPPA
+                            
                             foreach (Client client2 in clients.ToList())
                             {
                                 NetOutgoingMessage om = server.CreateMessage();
