@@ -65,6 +65,11 @@
     <Compile Include="TextureManager.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="WorldConfig\Config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
