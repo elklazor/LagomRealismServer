@@ -43,9 +43,9 @@ namespace LagomRealism
         /// <param name="pa">The array to modify</param>
         /// <param name="startY"> The starting Y coordinate</param>
         /// <returns>Heigthmap to the generated terrain</returns>
-        public static float[] GenerateTerrain(ref Microsoft.Xna.Framework.Point[] pa, int startY, int seed,int Jump)
+        public static float[] GenerateTerrain(ref Microsoft.Xna.Framework.Point[] pa, int startY, int seed,int Jump,int change)
         {
-            int maxChangeY = 5;
+            int maxChangeY = change;
             int jump = Jump;
             Random rnd = new Random(seed);
 

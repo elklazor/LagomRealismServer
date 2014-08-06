@@ -9,6 +9,7 @@ namespace LagomRealism
     {
         List<Client> Clients;
         public volatile bool End = false;
+        public volatile bool Stop = false;
         public ConsoleHelper(List<Client> clients)
         {
             Clients = clients;
@@ -28,7 +29,8 @@ namespace LagomRealism
                         Console.WriteLine("No clients connected");
                     break;
                 case "stop":
-                    
+                    Console.WriteLine("Stop requested by user");
+                    End = true;
                     break;
                 default:
                     Console.WriteLine("Unknown command");

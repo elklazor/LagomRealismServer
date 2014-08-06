@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using System.Xml;
+using System.Diagnostics;
 namespace LagomRealism
 {
     class World:GameComponent
@@ -14,7 +15,20 @@ namespace LagomRealism
         private GraphicsDevice Gd;
         private Texture2D worldTexture;
         private int seed;
+        private int jump;
+        private int maxChange;
+        public int MaxChange
+        {
+            get { return maxChange; }
+            set { maxChange = value; }
+        }
+        
 
+        public int Jump
+        {
+            get { return jump; }
+            set { jump = value; }
+        }
         public int Seed
         {
             get { return seed; }
@@ -52,7 +66,38 @@ namespace LagomRealism
             Gd = gd;
             Generate();
         }
+        /// <summary>
+        /// Loads world with config file
+        /// </summary>
+        /// <param name="configName">Name of config file without extension</param>
+        public void Load(string configName)
+        {
+            Console.WriteLine("Loading config...");
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load("./WorldConfig/" + configName + ".xml");
+            string[] size = (xDoc.SelectSingleNode("CONFIG//SIZE").InnerText).Split(':');
+            imageSize = new Point(Convert.ToInt32(size[0]),Convert.ToInt32(size[1]));
+            Seed = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//SEED").InnerText);
+            maxChange = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//MAXCHANGE").InnerText);
+            Jump = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//JUMP").InnerText);
+            Console.WriteLine(@"/***** Config *****\");
+            Console.WriteLine(WorldConfigToString());
+            Console.WriteLine(@"\******************/");
+            ServerGenerate();
+        }
+        public void StringLoad(string config,GraphicsDevice gd)
+        {
+            Gd = gd;
+            string[] conf = config.Split('|');
+            string[] sizArr = conf[0].Split(':');
+            imageSize = new Point(Convert.ToInt32(sizArr[0]),Convert.ToInt32(sizArr[1]));
+            seed = Convert.ToInt32(conf[1]);
+            Jump = Convert.ToInt32(conf[2]);
+            MaxChange = Convert.ToInt32(conf[3]);
+            Debug.WriteLine(WorldConfigToString());
+            Generate();
 
+        }
         public void Load(int x, int y)
         {
             this.imageSize = new Point(x, y);
@@ -61,22 +106,35 @@ namespace LagomRealism
 
         private void Generate()
         {
-            // Array size: screen width / jump(50) + 3
-            pointArr = new Point[(imageSize.X / 50) +3];
-            heightMap = TerrainManager.GenerateTerrain(ref pointArr, imageSize.Y / 2,Seed,50);
+            // Array size: (screen width / jump) + 3
+            pointArr = new Point[(imageSize.X / jump) +3];
+            heightMap = TerrainManager.GenerateTerrain(ref pointArr, imageSize.Y / 2,Seed,jump,maxChange);
             worldTexture = TerrainManager.PolygonToTexture(Gd, pointArr, imageSize);
         }
 
         private void ServerGenerate()
         {
             pointArr = new Point[imageSize.X];
-            heightMap = TerrainManager.GenerateTerrain(ref pointArr, imageSize.Y / 2,Seed,50);
+            heightMap = TerrainManager.GenerateTerrain(ref pointArr, imageSize.Y / 2,Seed,jump,maxChange);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(worldTexture, Vector2.Zero, Color.White);
             base.Draw(spriteBatch);
+        }
+
+        public string WorldConfigToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(imageSize.X + ":" + imageSize.Y);
+            sb.Append("|");
+            sb.Append(seed.ToString());
+            sb.Append("|");
+            sb.Append(jump.ToString());
+            sb.Append("|");
+            sb.Append(maxChange.ToString());
+            return sb.ToString();
         }
     }
 }

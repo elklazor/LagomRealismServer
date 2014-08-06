@@ -18,7 +18,6 @@ namespace LagomRealism
         public int ID;
         public bool NeedUpdate = false;
         private Vector2 prevPos = Vector2.Zero;
-        //Benjamin
         public Vector2 Position
         {
             get { return pos; }

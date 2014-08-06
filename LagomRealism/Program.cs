@@ -9,9 +9,10 @@ namespace LagomRealism
 {
     class Program
     {
-
+        
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Green;
             List<Client> clients = new List<Client>();
             ConsoleHelper ch = new ConsoleHelper(clients);
             Thread t = new Thread(ch.ListenForInput);
@@ -19,8 +20,6 @@ namespace LagomRealism
             NetPeerConfiguration config = new NetPeerConfiguration("lagom");
             config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
             config.Port = 14242;
-            int y = 400;
-            int x = 1600;
             List<GameEntity> entities = new List<GameEntity>();
             NetServer server = new NetServer(config);
             server.Start();
@@ -29,10 +28,9 @@ namespace LagomRealism
 
             double nextSendUpdates = NetTime.Now;
             double nextLowUpdate = NetTime.Now;
-            int imageWidth = 800;
-            int imageHeight = 400;
             World world = new World();
-            world.Load(imageWidth,imageHeight);
+             world.Load("Config");
+            //world.Load(1600, 400);
             Console.WriteLine("Server up and running on 14242");
             while (!Console.KeyAvailable || Console.ReadKey().Key != ConsoleKey.Escape || !ch.End)
             {
@@ -65,7 +63,8 @@ namespace LagomRealism
                                         
                                         break;
                                     case MessageType.ClientDisconnecting:
-                                        clients.First(h => h.ID == msg.ReadInt32()).Connected = false;
+                                        int id = msg.ReadInt32();
+                                        clients.First(h => h.ID == id).Connected = false;
                                         Console.WriteLine("Client disconnected (Closed)");
                                         break;
 
@@ -132,9 +131,7 @@ namespace LagomRealism
                                 NetOutgoingMessage message = server.CreateMessage();
                                 message.Write((int)MessageType.WorldSeed);
                                 message.Write(client.ID);
-                                message.Write(world.Seed);
-                                message.Write(x);
-                                message.Write(y);
+                                message.Write(world.WorldConfigToString());
                                 server.SendMessage(message, client.Connection, NetDeliveryMethod.ReliableOrdered);
                                 client.ReceivedWorld = true;
                                 continue;
@@ -153,13 +150,16 @@ namespace LagomRealism
                                     clients.Remove(client2);
                                 }
                             }
+
                         }
                         nextSendUpdates += (1.0 / 30.0);
                     }
                     
+                   
+                    
                 }
             }
-
+            
             foreach (Client c in clients)
             {
                 NetOutgoingMessage mess = server.CreateMessage();
