@@ -8,7 +8,7 @@ using System.Xml;
 using System.Diagnostics;
 namespace LagomRealism
 {
-    class World:GameComponent
+    class World
     {
 
         private float[] heightMap;
@@ -17,6 +17,8 @@ namespace LagomRealism
         private int seed;
         private int jump;
         private int maxChange;
+        private int Density;
+        
         public int MaxChange
         {
             get { return maxChange; }
@@ -80,6 +82,7 @@ namespace LagomRealism
             Seed = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//SEED").InnerText);
             maxChange = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//MAXCHANGE").InnerText);
             Jump = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//JUMP").InnerText);
+            Density = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//DENSITY").InnerText);
             Console.WriteLine(@"/***** Config *****\");
             Console.WriteLine(WorldConfigToString());
             Console.WriteLine(@"\******************/");
@@ -116,12 +119,15 @@ namespace LagomRealism
         {
             pointArr = new Point[imageSize.X];
             heightMap = TerrainManager.GenerateTerrain(ref pointArr, imageSize.Y / 2,Seed,jump,maxChange);
+            Random rnd = new Random(Seed);
+            //Generate trees
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(worldTexture, Vector2.Zero, Color.White);
-            base.Draw(spriteBatch);
+            
         }
 
         public string WorldConfigToString()

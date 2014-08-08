@@ -58,9 +58,15 @@ namespace LagomRealism
                                         break;
                                     case MessageType.ClientPosition:
 
-                                        int b = msg.ReadInt32();
-                                        clients.First(i => i.ID == b).Position = msg.ReadVector2();
-                                        
+                                        try
+                                        {
+                                            int b = msg.ReadInt32();
+                                            clients.First(i => i.ID == b).Position = msg.ReadVector2();
+                                        }
+                                        catch (Exception)
+                                        {
+                                            Console.WriteLine("Error, id not exist yes");
+                                        }
                                         break;
                                     case MessageType.ClientDisconnecting:
                                         int id = msg.ReadInt32();
@@ -155,8 +161,6 @@ namespace LagomRealism
                         nextSendUpdates += (1.0 / 30.0);
                     }
                     
-                   
-                    
                 }
             }
             
@@ -165,8 +169,15 @@ namespace LagomRealism
                 NetOutgoingMessage mess = server.CreateMessage();
                 mess.Write((int)MessageType.ServerClosing);
                 server.SendMessage(mess, c.Connection, NetDeliveryMethod.ReliableUnordered);
-
             }
         }
+    }
+    
+    class WorldEntity
+    {
+        public int ID;
+        public int X;
+        public int Y;
+        public int Type;
     }
 }

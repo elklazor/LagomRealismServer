@@ -8,7 +8,7 @@ using System.Text;
 
 namespace LagomRealism
 {
-    class Player:GameComponent
+    class Player
     {
         private Vector2 pos;
         private Vector2 velocity = Vector2.Zero;
@@ -29,7 +29,7 @@ namespace LagomRealism
             texture = TextureManager.TextureCache["Texture"];
             heightMap = hm;
             ID = id;
-            base.Load();
+            
         }
 
         public override void Update()
@@ -75,13 +75,13 @@ namespace LagomRealism
                 NeedUpdate = true;
 
             prevPos = pos;
-            base.Update();
+            
         }
 
         public override void Draw(SpriteBatch sb)
         {
             sb.Draw(texture, pos, Color.White);
-            base.Draw(sb);
+            
         }
         
         

@@ -32,12 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lidgren.Network, Version=2011.3.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lidgren\Lidgren-network-gen3\Lidgren.Network\bin\Debug\Lidgren.Network.dll</HintPath>
+    <Reference Include="Lidgren.Network">
+      <HintPath>..\..\..\..\Documents\Lidgren-network-gen3\Lidgren.Network\bin\Debug\Lidgren.Network.dll</HintPath>
     </Reference>
     <Reference Include="Lidgren.Network.Xna">
-      <HintPath>..\..\..\Lidgren\Lidgren-network-gen3\Lidgren XNA Extensions\Lidgren XNA Extensions\bin\Release\Lidgren.Network.Xna.dll</HintPath>
+      <HintPath>..\..\..\..\Documents\Lidgren-network-gen3\Lidgren XNA Extensions\Lidgren XNA Extensions\bin\Debug\Lidgren.Network.Xna.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -55,7 +54,6 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="ConsoleHelper.cs" />
-    <Compile Include="GameComponent.cs" />
     <Compile Include="GameComponentID.cs" />
     <Compile Include="GameEntity.cs" />
     <Compile Include="Player.cs" />
@@ -68,6 +66,7 @@
   <ItemGroup>
     <Content Include="WorldConfig\Config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
