@@ -10,12 +10,12 @@ namespace LagomRealism
         /// <summary>
         /// Heyo
         /// </summary>
-        List<Client> Clients;
+        private GameServer GC;
         public volatile bool End = false;
         public volatile bool Stop = false;
-        public ConsoleHelper(List<Client> clients)
+        public ConsoleHelper(GameServer gc)
         {
-            Clients = clients;
+            GC = gc;
         }
         public void ListenForInput()
         {
@@ -24,16 +24,28 @@ namespace LagomRealism
             switch (s)
             {
                 case "list":
-                    foreach (Client c in Clients)
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    foreach (Client c in GC.clients)
                     {
                         Console.WriteLine(c.ToString());
                     }
-                    if (Clients.Count == 0)
+                    if (GC.clients.Count == 0)
                         Console.WriteLine("No clients connected");
+
+                    Console.ForegroundColor = ConsoleColor.Green;
                     break;
                 case "stop":
                     Console.WriteLine("Stop requested by user");
                     End = true;
+                    break;
+                case "entities":
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    foreach (WorldEntity e in GC.world.entities)
+                    {
+                        
+                        Console.WriteLine(e.ToString());
+                    }
+                    Console.ForegroundColor = ConsoleColor.Green;
                     break;
                 default:
                     Console.WriteLine("Unknown command");

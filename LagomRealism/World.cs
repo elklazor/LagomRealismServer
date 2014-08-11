@@ -18,7 +18,7 @@ namespace LagomRealism
         private int jump;
         private int maxChange;
         private int Density;
-        
+        public List<WorldEntity> entities = new List<WorldEntity>();
         public int MaxChange
         {
             get { return maxChange; }
@@ -121,10 +121,29 @@ namespace LagomRealism
             heightMap = TerrainManager.GenerateTerrain(ref pointArr, imageSize.Y / 2,Seed,jump,maxChange);
             Random rnd = new Random(Seed);
             //Generate trees
+            bool prevGen = false;
+            int ID = 0;
+            for (int i = 0; i < imageSize.X; i++)
+            {
+                if (rnd.Next(0, Density) > Density - 10 && !prevGen)
+                {
+                    //Add logic for different entities
+                    entities.Add(new WorldEntity(ID++, i, heightMap[i], 1));
+                    
+                    prevGen = true;
+                }
+                else
+                    prevGen = false;
 
+                if (i + 50 <= imageSize.X)
+                    i += 50;
+                else
+                    i += imageSize.X - i;
+            }
+            
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(worldTexture, Vector2.Zero, Color.White);
             

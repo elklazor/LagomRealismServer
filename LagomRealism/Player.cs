@@ -32,7 +32,7 @@ namespace LagomRealism
             
         }
 
-        public override void Update()
+        public void Update()
         {
             //Input
             
@@ -78,7 +78,7 @@ namespace LagomRealism
             
         }
 
-        public override void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb)
         {
             sb.Draw(texture, pos, Color.White);
             
