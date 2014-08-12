@@ -138,7 +138,7 @@ namespace LagomRealism
                 if (i + 50 <= imageSize.X)
                     i += 50;
                 else
-                    i += imageSize.X - i;
+                    i += imageSize.X - i; 
             }
             
         }
