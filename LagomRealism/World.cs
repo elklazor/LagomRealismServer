@@ -128,7 +128,7 @@ namespace LagomRealism
                 if (rnd.Next(0, Density) > Density - 10 && !prevGen)
                 {
                     //Add logic for different entities
-                    entities.Add(new WorldEntity(ID++, i, heightMap[i], 1));
+                    entities.Add(new WorldEntity(ID++, i, heightMap[i], rnd.Next(1,3)));
                     
                     prevGen = true;
                 }

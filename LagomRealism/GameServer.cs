@@ -65,7 +65,10 @@ namespace LagomRealism
                                         try
                                         {
                                             int b = msg.ReadInt32();
-                                            clients.First(i => i.ID == b).Position = msg.ReadVector2();
+                                            Client cli = clients.First(i => i.ID == b);
+                                            cli.Position = msg.ReadVector2();
+                                            cli.AnimState = msg.ReadInt32();
+                                            cli.Flip = msg.ReadBoolean();
                                         }
                                         catch (Exception)
                                         {
@@ -161,16 +164,21 @@ namespace LagomRealism
                             
                             foreach (Client client2 in clients.ToList())
                             {
-                                NetOutgoingMessage om = server.CreateMessage();
-                                om.Write((int)MessageType.ClientPosition);
-                                om.Write(client2.ID);
-                                om.Write(client2.Position);
-                                om.Write(client2.Connected);
-                                server.SendMessage(om, client.Connection, NetDeliveryMethod.UnreliableSequenced);
-                                if (!client2.Connected)
-                                {
-                                    clients.Remove(client2);
-                                }
+                               if(client.Connection != client2.Connection)
+                               {
+                                    NetOutgoingMessage om = server.CreateMessage();
+                                    om.Write((int)MessageType.ClientPosition);
+                                    om.Write(client2.ID);
+                                    om.Write(client2.Position);
+                                    om.Write(client2.Connected);
+                                    om.Write(client2.AnimState);
+                                    om.Write(client2.Flip);
+                                    server.SendMessage(om, client.Connection, NetDeliveryMethod.UnreliableSequenced);
+                                    if (!client2.Connected)
+                                    {
+                                        clients.Remove(client2);
+                                    }
+                               }
                             }
 
                         }

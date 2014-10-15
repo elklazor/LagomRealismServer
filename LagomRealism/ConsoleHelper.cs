@@ -38,7 +38,7 @@ namespace LagomRealism
                     Console.WriteLine("Stop requested by user");
                     End = true;
                     break;
-                case "entities":
+                case "ent":
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     foreach (WorldEntity e in GC.world.entities)
                     {

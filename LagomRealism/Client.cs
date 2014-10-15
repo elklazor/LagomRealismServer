@@ -16,6 +16,8 @@ namespace LagomRealism
         private Vector2 position;
         public long Identifier;
         public bool Connected;
+        public int AnimState;
+        public bool Flip;
         public Vector2 Position
         {
             get { return position; }
