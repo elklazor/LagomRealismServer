@@ -19,7 +19,7 @@ namespace LagomRealism
         public void Start()
         {
             //Now im testing for realzz
-            Console.WriteLine("KAsper SUGER");
+           
             Console.ForegroundColor = ConsoleColor.Green;
             ch = new ConsoleHelper(this);
             Thread t = new Thread(ch.ListenForInput);
