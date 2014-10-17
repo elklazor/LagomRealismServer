@@ -19,7 +19,7 @@ namespace LagomRealism
         public void Start()
         {
             //Now im testing for realzz
-           
+           //OK
             Console.ForegroundColor = ConsoleColor.Green;
             ch = new ConsoleHelper(this);
             Thread t = new Thread(ch.ListenForInput);
