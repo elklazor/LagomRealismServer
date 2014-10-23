@@ -23,7 +23,7 @@ namespace LagomRealism
             get { return pos; }
             set { pos = value; }
         }
-        
+        private Vector2 handPosition = new Vector2();
         public Player(float[] hm, int id)
         {
             texture = TextureManager.TextureCache["Texture"];
