@@ -71,6 +71,9 @@ namespace LagomRealism
                                             cli.Position = msg.ReadVector2();
                                             cli.AnimState = msg.ReadInt32();
                                             cli.Flip = msg.ReadBoolean();
+                                            cli.WeaponPosition = msg.ReadVector2();
+                                            cli.WeaponRotation = msg.ReadFloat();
+                                            cli.Idle = msg.ReadBoolean();
                                         }
                                         catch (Exception)
                                         {
@@ -174,7 +177,10 @@ namespace LagomRealism
                                     om.Write(client2.Position);
                                     om.Write(client2.Connected);
                                     om.Write(client2.AnimState);
-                                    om.Write(client2.Flip);
+                                    om.Write(!client2.Flip);
+                                    om.Write(client2.WeaponPosition);
+                                    om.Write(client2.WeaponRotation);
+                                    om.Write(client2.Idle);
                                     server.SendMessage(om, client.Connection, NetDeliveryMethod.UnreliableSequenced);
                                     if (!client2.Connected)
                                     {

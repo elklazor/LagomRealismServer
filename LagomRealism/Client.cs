@@ -13,11 +13,16 @@ namespace LagomRealism
        // private Player player;
         public NetConnection Connection;
         public bool ReceivedWorld = false;
+        public bool Idle;
         private Vector2 position;
         public long Identifier;
         public bool Connected;
         public int AnimState;
         public bool Flip;
+        //Wep
+        public float WeaponRotation;
+        public Vector2 WeaponPosition;
+
         public Vector2 Position
         {
             get { return position; }
@@ -35,8 +40,8 @@ namespace LagomRealism
 
         public override string ToString()
         {
-            
-            return "ID: " + ID.ToString() + " |:| ReceivedWorld: " + ReceivedWorld.ToString();
+
+            return "ID: " + ID.ToString() + " |:| ReceivedWorld: " + ReceivedWorld.ToString() + " |:| FLIP: " + Flip.ToString() ;
         }
     }
 }
