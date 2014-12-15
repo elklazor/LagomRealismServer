@@ -18,6 +18,7 @@ namespace LagomRealism
         private int jump;
         private int maxChange;
         private int Density;
+        private int maxID;
         public List<WorldEntity> entities = new List<WorldEntity>();
         public int MaxChange
         {
@@ -83,6 +84,7 @@ namespace LagomRealism
             maxChange = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//MAXCHANGE").InnerText);
             Jump = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//JUMP").InnerText);
             Density = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//DENSITY").InnerText);
+            maxID = Convert.ToInt32(xDoc.SelectSingleNode("CONFIG//MAXID").InnerText);
             Console.WriteLine(@"/***** Config *****\");
             Console.WriteLine(WorldConfigToString());
             Console.WriteLine(@"\******************/");
@@ -127,8 +129,8 @@ namespace LagomRealism
             {
                 if (rnd.Next(0, Density) > Density - 10 && !prevGen)
                 {
-                    //Add logic for different entities
-                    entities.Add(new WorldEntity(ID++, i, heightMap[i], rnd.Next(1,3)));
+                    
+                    entities.Add(new WorldEntity(ID++, i, heightMap[i], rnd.Next(1,maxID +1)));
                     
                     prevGen = true;
                 }
@@ -159,6 +161,8 @@ namespace LagomRealism
             sb.Append(jump.ToString());
             sb.Append("|");
             sb.Append(maxChange.ToString());
+            sb.Append("|");
+            sb.Append(maxID.ToString());
             return sb.ToString();
         }
     }

@@ -11,7 +11,6 @@ namespace LagomRealism
     class GameServer
     {
         public List<Client> clients = new List<Client>();
-        public List<GameEntity> entities = new List<GameEntity>();
         private ConsoleHelper ch;
         public World world = new World();
         private Timer timer;
@@ -40,6 +39,8 @@ namespace LagomRealism
             Console.WriteLine("Server up and running on 14242");
             while (!Console.KeyAvailable || Console.ReadKey().Key != ConsoleKey.Escape || !ch.End)
             {
+                if (ch.End)
+                    goto CloseServer;
                 NetIncomingMessage msg;
                 while ((msg = server.ReadMessage()) != null)
                 {
@@ -58,9 +59,9 @@ namespace LagomRealism
                                         break;
                                     case MessageType.EntityUpdate:
 
-                                        int c = msg.ReadInt32();
-                                        entities.First(i => i.ID == c).State = (EntityState)msg.ReadInt32();
-
+                                        int c = msg.ReadInt32(); //ID
+                                        WorldEntity locEntity = world.entities.First(cl => cl.ID == c);
+                                        locEntity.State = msg.ReadInt32();
                                         break;
                                     case MessageType.ClientPosition:
 
@@ -140,7 +141,7 @@ namespace LagomRealism
                     double now = NetTime.Now;
                     if (now > nextSendUpdates)
                     {
-                        
+                        List<WorldEntity> itemsNeedUpdate = world.entities.Where(localEntity => localEntity.NeedUpdate == true).ToList() ;
                         foreach (Client client in clients.ToList())
                         {
                             if (!client.ReceivedWorld)
@@ -187,6 +188,18 @@ namespace LagomRealism
                                         clients.Remove(client2);
                                     }
                                }
+
+                               foreach (var entity in itemsNeedUpdate)
+                               {
+                                   
+                                   NetOutgoingMessage entityMessage = server.CreateMessage();
+                                   entityMessage.Write((int)MessageType.EntityUpdate);
+                                   entityMessage.Write(false);
+                                   entityMessage.Write(entity.ID);
+                                   entityMessage.Write(entity.State);
+                                   server.SendMessage(entityMessage, client2.Connection, NetDeliveryMethod.Unreliable);
+                                   entity.NeedUpdate = false;
+                               }
                             }
 
                         }
@@ -195,7 +208,7 @@ namespace LagomRealism
                     
                 }
             }
-            
+            CloseServer:
             foreach (Client c in clients)
             {
                 NetOutgoingMessage mess = server.CreateMessage();
