@@ -62,7 +62,7 @@ namespace LagomRealism
 
                                         int c = msg.ReadInt32(); //ID
                                         world.entities.First(cl => cl.ID == c).State = msg.ReadInt32();
-                                        
+                                        Console.WriteLine("Got entity update from client");
                                         break;
                                     case MessageType.ClientPosition:
 

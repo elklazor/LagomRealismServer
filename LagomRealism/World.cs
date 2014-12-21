@@ -20,6 +20,7 @@ namespace LagomRealism
         private int Density;
         private int maxID;
         public List<WorldEntity> entities = new List<WorldEntity>();
+
         public int MaxChange
         {
             get { return maxChange; }
