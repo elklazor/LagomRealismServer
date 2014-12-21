@@ -33,7 +33,8 @@ namespace LagomRealism
 
             double nextSendUpdates = NetTime.Now;
             double nextLowUpdate = NetTime.Now;
-           
+            double nextSendEntityUpdate = NetTime.Now;
+            
              world.Load("Config");
             //world.Load(1600, 400);
             Console.WriteLine("Server up and running on 14242");
@@ -60,8 +61,8 @@ namespace LagomRealism
                                     case MessageType.EntityUpdate:
 
                                         int c = msg.ReadInt32(); //ID
-                                        WorldEntity locEntity = world.entities.First(cl => cl.ID == c);
-                                        locEntity.State = msg.ReadInt32();
+                                        world.entities.First(cl => cl.ID == c).State = msg.ReadInt32();
+                                        
                                         break;
                                     case MessageType.ClientPosition:
 
@@ -141,7 +142,10 @@ namespace LagomRealism
                     double now = NetTime.Now;
                     if (now > nextSendUpdates)
                     {
-                        List<WorldEntity> itemsNeedUpdate = world.entities.Where(localEntity => localEntity.NeedUpdate == true).ToList() ;
+                        
+                        List<WorldEntity> itemsNeedUpdate = (NetTime.Now < nextSendEntityUpdate) ? world.entities.Where(localEntity => localEntity.NeedUpdate == true).ToList() : world.entities;
+                        if (NetTime.Now > nextSendEntityUpdate)
+                            nextSendEntityUpdate += 5;
                         foreach (Client client in clients.ToList())
                         {
                             if (!client.ReceivedWorld)
@@ -160,6 +164,7 @@ namespace LagomRealism
                                     m.Write(true);
                                     m.Write(entity.ID);
                                     m.Write(entity.Type);
+                                    m.Write(entity.State);
                                     m.Write(entity.X);
                                     m.Write(entity.Y);
                                     server.SendMessage(m, client.Connection, NetDeliveryMethod.ReliableOrdered);

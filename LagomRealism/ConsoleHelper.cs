@@ -42,7 +42,6 @@ namespace LagomRealism
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     foreach (WorldEntity e in GC.world.entities)
                     {
-                        
                         Console.WriteLine(e.ToString());
                     }
                     Console.ForegroundColor = ConsoleColor.Green;
